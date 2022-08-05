@@ -1,10 +1,13 @@
 ﻿
 using AutoMapper;
+using Nutri.Application.Features.Food.Commands.SaveFood;
 using Nutri.Application.Features.Patients.Commands.DeletePatient;
 using Nutri.Application.Features.Patients.Commands.ModifyPatient;
 using Nutri.Application.Features.Patients.Commands.SavePatient;
+using Nutri.Application.Features.Suplements.Commands.AddCustomList;
 using Nutri.Application.Features.Users.Commands.AddUser;
 using Nutri.Application.Features.Users.Queries.Login;
+using Nutri.Domain.DTOS;
 using Nutri.Domain.Models;
 
 namespace Nutri.Application.Mappings
@@ -18,6 +21,9 @@ namespace Nutri.Application.Mappings
             CreateMap<DeletePatientCommand, Paciente>();
             CreateMap<ModifyPatientCommand, Paciente>();
             CreateMap<SavePatientCommand, Paciente>();
+            CreateMap<AddCustomListCommand, AddCustomListDTO>();
+            CreateMap<SaveFoodCommand, Alimento>();
+
         }
     }
 }

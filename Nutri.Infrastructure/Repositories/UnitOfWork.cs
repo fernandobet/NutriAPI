@@ -11,10 +11,14 @@ namespace Nutri.Infrastructure.Repositories
         private Hashtable _repositories;
         private readonly NutriAppContext _context;
         private IUsersRepository _usersRepository;
-        public IPatientsRepository _patientRepository;
+        private IPatientsRepository _patientRepository;
+        private ISuplementsRepository _suplementsRepository;
+        private IFoodRepository _foodRepository;
 
+        public IFoodRepository FoodRepository => _foodRepository ?? new FoodRepository(_context);
         public IPatientsRepository PatientRepository => _patientRepository ?? new PatientsRepository(_context);
         public IUsersRepository UserRepository => _usersRepository ?? new UsersRepository(_context);
+        public ISuplementsRepository SuplementsRepository => _suplementsRepository ?? new SuplementsRepository(_context);
 
         public UnitOfWork(NutriAppContext context)
         {

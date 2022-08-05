@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nutri.Application.Features.Patients.Commands.DeletePatient;
 using Nutri.Application.Features.Patients.Commands.ModifyPatient;
 using Nutri.Application.Features.Patients.Commands.SavePatient;
+using Nutri.Application.Features.Patients.Commands.SavePatientDiet;
 using Nutri.Application.Features.Patients.Queries.GetPatients;
 using Nutri.Domain.Models;
 using System.Net;
@@ -18,6 +19,15 @@ namespace NutriAPI.Controllers
         public PatientsController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+        [HttpPost]
+        [Route("SavePatientDiet")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<ActionResult> SavePatientDiet([FromBody] SavePatientDietCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok();
         }
 
         [HttpGet]
