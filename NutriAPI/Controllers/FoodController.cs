@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Nutri.Application.Features.Food.Commands.SaveFood;
+using Nutri.Application.Features.Food.Queries.GetFamilies;
 using Nutri.Application.Features.Food.Queries.GetFamiliesFood;
 using Nutri.Application.Features.Food.Queries.GetFamilyFood;
 using Nutri.Application.Features.Food.Queries.GetFoodList;
@@ -18,6 +19,14 @@ namespace NutriAPI.Controllers
         public FoodController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+        [HttpGet]
+        [Route("GetFamilies")]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<IEnumerable<FamiliaAlimento>>> GetFamilies()
+        {
+            var data = await _mediator.Send(new GetFamiliesFoodQuery());
+            return Ok(data);
         }
         [HttpGet]
         [Route("GetFamilyFood/{id}")]

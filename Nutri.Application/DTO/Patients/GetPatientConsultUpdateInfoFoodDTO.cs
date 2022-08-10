@@ -1,6 +1,6 @@
-﻿namespace Nutri.Application.Features.Patients.Queries.GetPatientConsult
+﻿namespace Nutri.Application.DTO.Patients
 {
-    public class GetPatientConsultUpdateInfoFoodVm
+    public class GetPatientConsultUpdateInfoFoodDTO
     {
         public short Proteina { get; set; }
         public short Carbohidratos { get; set; }

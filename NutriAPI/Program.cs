@@ -31,7 +31,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 //Agregamos el middleware
-app.UseMiddleware<ExceptionMiddleware>();
+//app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 //Colocar este para la autenticacion con identity
 app.UseAuthentication();

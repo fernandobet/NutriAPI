@@ -1,9 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Nutri.Application.DTO.Patiients;
 using Nutri.Application.Features.Patients.Commands.DeletePatient;
 using Nutri.Application.Features.Patients.Commands.ModifyPatient;
 using Nutri.Application.Features.Patients.Commands.SavePatient;
 using Nutri.Application.Features.Patients.Commands.SavePatientDiet;
+using Nutri.Application.Features.Patients.Queries.GetHistoryPatient;
+using Nutri.Application.Features.Patients.Queries.GetPatientConsult;
 using Nutri.Application.Features.Patients.Queries.GetPatients;
 using Nutri.Domain.Models;
 using System.Net;
@@ -64,5 +67,27 @@ namespace NutriAPI.Controllers
             await _mediator.Send(patient);
             return Ok();
         }
+
+        [HttpGet]
+        [Route("PatientHistory")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<GetHistoryPatientVm> PatientHistory([FromQuery] int idPaciente)
+        {
+            var patientHistory = await _mediator.Send(new GetHistoryPatientQuery { IdPaciente = idPaciente });
+            return patientHistory;
+        }
+
+        [HttpGet]
+        [Route("InfConsulta")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        public async Task<GetPatientConsultDTO> InfoConsulta(int idConsulta)
+        {
+            var consultas = await _mediator.Send(new GetPatientConsultQuery { IdConsulta = idConsulta });
+            return consultas;
+        }
+
+
     }
 }

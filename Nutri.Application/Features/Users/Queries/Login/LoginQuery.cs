@@ -6,6 +6,7 @@ namespace Nutri.Application.Features.Users.Queries.Login
 {
     public class LoginQuery:IRequest<Usuario>
     {
-        public Usuario User { get; set; }
+        public string UserName { get; set; } = string.Empty;    
+        public string PassWord { get; set; } = string.Empty ;
     }
 }

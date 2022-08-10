@@ -4,6 +4,7 @@ using Nutri.Application.Contracts.Persistence;
 using Nutri.Application.Features.Users.Commands.AddUser;
 using Nutri.Application.Features.Users.Queries.GetUser;
 using Nutri.Application.Features.Users.Queries.GetUsers;
+using Nutri.Application.Features.Users.Queries.Login;
 using Nutri.Domain.Models;
 
 namespace NutriAPI.Controllers
@@ -29,7 +30,7 @@ namespace NutriAPI.Controllers
         [Route("iniciarSesion")]
         public async Task<IActionResult> iniciarSesion(Usuario usuario)
         {
-            var user = await _mediator.Send(usuario);
+            var user = await _mediator.Send(new LoginQuery { UserName = usuario.Email, PassWord = usuario.Password });
             return Ok(user);
         }
         [HttpGet()]

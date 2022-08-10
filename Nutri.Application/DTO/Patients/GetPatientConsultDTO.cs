@@ -1,9 +1,10 @@
-﻿using Nutri.Application.Models.Email;
+﻿using Nutri.Application.Features.Patients.Queries.GetPatientConsult;
+using Nutri.Application.Models.Email;
 using System.Text.Json.Serialization;
 
-namespace Nutri.Application.Features.Patients.Queries.GetPatientConsult
+namespace Nutri.Application.DTO.Patiients
 {
-    public class GetPatientConsultVm
+    public class GetPatientConsultDTO
     {
         public int IdPaciente { get; set; }
         public string NombrePaciente { get; set; } = string.Empty;
@@ -16,7 +17,7 @@ namespace Nutri.Application.Features.Patients.Queries.GetPatientConsult
         public string Suplementos { get; set; } = string.Empty;
         public string Notas { get; set; } = string.Empty;
 
-        public GetPatientConsultVm()
+        public GetPatientConsultDTO()
         {
             AlimentosSave = new List<GetPatientConsultSelectedFoodVm>();
             Alimentos = new List<GetPatientConsultInfoFoodVm>();
