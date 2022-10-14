@@ -95,16 +95,16 @@ namespace Nutri.Infrastructure.Migrations
             modelBuilder.Entity("Nutri.Domain.Models.ConsultaPacienteAlimentos", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("RenglonComida")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Comida")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ConsultaPacienteId")
+                    b.Property<int>("ConsultaPacienteId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FechaCreacion")
@@ -117,11 +117,61 @@ namespace Nutri.Infrastructure.Migrations
                     b.Property<short>("NumeroComida")
                         .HasColumnType("smallint");
 
-                    b.HasKey("Id", "RenglonComida");
+                    b.HasKey("Id");
 
                     b.HasIndex("ConsultaPacienteId");
 
                     b.ToTable("ConsultasPacientesAlimentos");
+                });
+
+            modelBuilder.Entity("Nutri.Domain.Models.ConsultaPacienteNotas", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ConsultaPacienteId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nota")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConsultaPacienteId");
+
+                    b.ToTable("ConsultasPacientesNotas");
+                });
+
+            modelBuilder.Entity("Nutri.Domain.Models.ConsultaPacienteSuplementos", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ConsultaPacienteId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Suplemento")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConsultaPacienteId");
+
+                    b.ToTable("ConsultasPacientesSuplementos");
                 });
 
             modelBuilder.Entity("Nutri.Domain.Models.FamiliaAlimento", b =>
@@ -151,14 +201,10 @@ namespace Nutri.Infrastructure.Migrations
             modelBuilder.Entity("Nutri.Domain.Models.ListaSuplementoPersonalizada", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Renglon")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DescripcionSuplemento")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
@@ -167,9 +213,34 @@ namespace Nutri.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id", "Renglon");
+                    b.HasKey("Id");
 
                     b.ToTable("ListasSuplementosPersonalizada");
+                });
+
+            modelBuilder.Entity("Nutri.Domain.Models.ListaSuplementoPersonalizadaDetalle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("DescripcionSuplemento")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ListaPersonalizadaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ListaPersonalizadaId");
+
+                    b.ToTable("ListasSuplementosPersonalizadasDetalle");
                 });
 
             modelBuilder.Entity("Nutri.Domain.Models.MedicionAlimento", b =>
@@ -200,7 +271,7 @@ namespace Nutri.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Decripcion")
+                    b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -337,9 +408,44 @@ namespace Nutri.Infrastructure.Migrations
                 {
                     b.HasOne("Nutri.Domain.Models.ConsultaPaciente", "ConsultaPaciente")
                         .WithMany("ConsultasPacienteAlimentos")
-                        .HasForeignKey("ConsultaPacienteId");
+                        .HasForeignKey("ConsultaPacienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ConsultaPaciente");
+                });
+
+            modelBuilder.Entity("Nutri.Domain.Models.ConsultaPacienteNotas", b =>
+                {
+                    b.HasOne("Nutri.Domain.Models.ConsultaPaciente", "ConsultaPaciente")
+                        .WithMany()
+                        .HasForeignKey("ConsultaPacienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ConsultaPaciente");
+                });
+
+            modelBuilder.Entity("Nutri.Domain.Models.ConsultaPacienteSuplementos", b =>
+                {
+                    b.HasOne("Nutri.Domain.Models.ConsultaPaciente", "ConsultaPaciente")
+                        .WithMany()
+                        .HasForeignKey("ConsultaPacienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ConsultaPaciente");
+                });
+
+            modelBuilder.Entity("Nutri.Domain.Models.ListaSuplementoPersonalizadaDetalle", b =>
+                {
+                    b.HasOne("Nutri.Domain.Models.ListaSuplementoPersonalizada", "ListaPersonalizada")
+                        .WithMany()
+                        .HasForeignKey("ListaPersonalizadaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ListaPersonalizada");
                 });
 
             modelBuilder.Entity("Nutri.Domain.Models.Suplemento", b =>

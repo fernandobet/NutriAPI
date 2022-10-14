@@ -1,5 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Nutri.Application.Features.Food.Commands.DeleteFood;
+using Nutri.Application.Features.Food.Commands.ModifyFood;
+using Nutri.Application.Features.Food.Commands.ModifyFoodFamily;
 using Nutri.Application.Features.Food.Commands.SaveFood;
 using Nutri.Application.Features.Food.Queries.GetFamilies;
 using Nutri.Application.Features.Food.Queries.GetFamiliesFood;
@@ -20,6 +23,21 @@ namespace NutriAPI.Controllers
         {
             _mediator = mediator;
         }
+        [HttpDelete]
+        [Route("DeleteFoodCommand/{id}")]
+        public async Task<ActionResult> DeleteFood(int id)
+        {
+            var command = new DeleteFoodCommand { Id = id };
+            await this._mediator.Send(command);
+            return Ok();
+        }
+        [HttpPut]
+        [Route("ModifyFoodFamily")]
+        public async Task<ActionResult> ModifyFoodFamily(ModifyFoodFamilyCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok();
+        }
         [HttpGet]
         [Route("GetFamilies")]
         [ProducesDefaultResponseType]
@@ -31,7 +49,7 @@ namespace NutriAPI.Controllers
         [HttpGet]
         [Route("GetFamilyFood/{id}")]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<FamiliaAlimento>> GetFamilyFood([FromQuery] int id)
+        public async Task<ActionResult<FamiliaAlimento>> GetFamilyFood(int id)
         {
             var query = new GetFamilyFoodQuery { Id = id };
             var familyFood = await _mediator.Send(query);
@@ -41,7 +59,7 @@ namespace NutriAPI.Controllers
         [HttpGet]
         [Route("GetFoodByFamily/{id}")]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult<IEnumerable<Alimento>>> GetFoodByFamily([FromQuery] int id)
+        public async Task<ActionResult<IEnumerable<Alimento>>> GetFoodByFamily( int id)
         {
             var familyList = await _mediator.Send(new GetFoodByFamilyQuery { IdFamily = id });
             return Ok(familyList);
@@ -67,6 +85,15 @@ namespace NutriAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesDefaultResponseType]
         public async Task<ActionResult> SaveFood([FromBody] SaveFoodCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok();
+        }
+        [HttpPut]
+        [Route("ModifyFood")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult> ModifyFood([FromBody] ModifyFoodCommand command)
         {
             await _mediator.Send(command);
             return Ok();

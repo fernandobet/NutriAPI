@@ -17,8 +17,6 @@ namespace Nutri.Domain.DTOS
     }
     public class AlimentosSeleccionados
     {
-        public long IdConsulta { get; set; }
-        public short RenglonComida { get; set; }
         public string Comida { get; set; } = string.Empty;
         public string HoraComida { get; set; } = String.Empty;
     }

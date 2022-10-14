@@ -19,7 +19,7 @@ namespace Nutri.Application.Features.Patients.Queries.GetHistoryPatient
             var consultasPacientes =  await _unitOfWork.PatientRepository.GetAllHistory(request.IdPaciente);
 
             if (!consultasPacientes.Any())
-                Enumerable.Empty<GetHistoryPatientVm>();
+                return null;
             var historyViewModel = new GetHistoryPatientVm {
                 Nombre = paciente.Nombre,
                 Apellido = paciente.Apellido,
@@ -30,7 +30,7 @@ namespace Nutri.Application.Features.Patients.Queries.GetHistoryPatient
                 ListaConsultas = consultasPacientes.Select(x => new HistorialPacientes { 
                  FechaConsulta = x.FechaCreacion.ToShortDateString(),
                  IdConsulta = x.Id
-                }).ToList()
+                }).OrderByDescending(x=>x.FechaConsulta).ToList()
             };
             return historyViewModel;
 

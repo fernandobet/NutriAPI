@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Nutri.Domain.Common;
 
 namespace Nutri.Domain.Models
 {
-    internal class ConsultaPacienteNotas
+    public class ConsultaPacienteNotas:BaseDomainModel
     {
+        public string Nota { get; set; } = string.Empty;    
+        public ConsultaPaciente? ConsultaPaciente { get; set; }
+        public int ConsultaPacienteId { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Nutri.Application.Contracts.Persistence;
+﻿using Microsoft.EntityFrameworkCore;
+using Nutri.Application.Contracts.Persistence;
+using Nutri.Application.Features.Suplements.Commands.EditCustomSuplementList;
 using Nutri.Application.Features.Suplements.Queries.GetSuplementsCustomList;
 using Nutri.Application.Features.Suplements.Queries.GetSuplementsMedition;
 using Nutri.Domain.DTOS;
@@ -18,47 +20,80 @@ namespace Nutri.Infrastructure.Repositories
         public List<GetSuplementsCustomListVm> GetSuplementsCustomList()
         {
             var listaPersonalizada = new List<GetSuplementsCustomListVm>();
+
             var listaEntidad = _context.ListasSuplementosPersonalizada!.ToList();
             if (listaEntidad == null)
                 return listaPersonalizada;
-            listaPersonalizada = listaEntidad.GroupBy(x => new { x.Id, x.Nombre }).Select(x => new GetSuplementsCustomListVm
+            foreach (var lista in listaEntidad)
             {
-                Id = x.Key.Id,
-                NombreLista = x.Key.Nombre,
-                Contenido = new List<string>(x.Select(x => x.DescripcionSuplemento))
-            }).ToList();
+                listaPersonalizada.Add(new GetSuplementsCustomListVm { 
+                Id = lista.Id,
+                NombreLista = lista.Nombre
+                });
+            }
             return listaPersonalizada;
         }
 
         public List<GetSuplementsMeditionVm> GetSuplementsMedition()
         {
             var resultado = (from suplementos in _context.Suplementos
-                             join mediciones in _context.MedicionesSuplementos! on suplementos.Id equals mediciones.Id
+                             join mediciones in _context.MedicionesSuplementos! on suplementos.MedicionSuplementoId equals mediciones.Id
                              select new GetSuplementsMeditionVm()
                              {
                                  IdMedicion = mediciones.Id,
                                  IdSuplemento = suplementos.Id,
-                                 Medicion = mediciones.Decripcion,
+                                 Medicion = mediciones.Descripcion,
                                  Suplemento = suplementos.Nombre
                              }
                  ).ToList();
             return resultado;
         }
 
+        public async Task EditCustomList(AddCustomListDTO dto)
+        {
+            var cabecero = _context.ListasSuplementosPersonalizada!.FirstOrDefault(x => x.Id == dto.Id);
+            cabecero!.Nombre = dto.NombreLista;
+            _context.ListasSuplementosPersonalizada!.Update(cabecero);
+            var detalle = await _context.ListasSuplementosPersonalizadasDetalle!.Where(x => x.ListaPersonalizadaId == dto.Id).ToListAsync();
+            _context.ListasSuplementosPersonalizadasDetalle!.RemoveRange(detalle);
+            var nuevoDetalle = new List<ListaSuplementoPersonalizadaDetalle>();
+            foreach (var suplemento in dto.Contenido)
+            {
+                nuevoDetalle.Add(new ListaSuplementoPersonalizadaDetalle
+                {
+                    ListaPersonalizadaId = cabecero.Id,
+                    DescripcionSuplemento = suplemento,
+                    FechaCreacion = DateTime.Now,
+                    ListaPersonalizada = cabecero
+                });
+            }
+            await _context.ListasSuplementosPersonalizadasDetalle!.AddRangeAsync(nuevoDetalle);
+            await _context.SaveChangesAsync();
+        }
         public async Task SaveCustomList(AddCustomListDTO dto)
         {
-            var finalList = new List<ListaSuplementoPersonalizada>();
-            short renglon = 1;
-
-            foreach (var item in dto.Contenido)
+            var cabecero = new ListasSuplementosPersonalizadasDetalle { 
+            Nombre = dto.NombreLista,
+            FechaCreacion = DateTime.Now
+            };
+            await _context.ListasSuplementosPersonalizada!.AddAsync(cabecero);
+            var detalle = new List<ListaSuplementoPersonalizadaDetalle>();
+            foreach (var suplemento in dto.Contenido)
             {
-                await _context.ListasSuplementosPersonalizada!.AddAsync(new ListaSuplementoPersonalizada { 
-                    Nombre = dto.NombreLista,
-                    DescripcionSuplemento = item,
-                    Renglon = renglon
+                detalle.Add(new ListaSuplementoPersonalizadaDetalle { 
+                ListaPersonalizadaId = cabecero.Id,
+                DescripcionSuplemento = suplemento,
+                FechaCreacion = DateTime.Now,
+                ListaPersonalizada = cabecero
                 });
-                renglon++;
             }
+            await _context.ListasSuplementosPersonalizadasDetalle!.AddRangeAsync(detalle);
+        }
+        public async Task<List<ListaSuplementoPersonalizadaDetalle>> GetSuplementCustomListDetailById(int id)
+        {
+            return await (from customListDetail in _context.ListasSuplementosPersonalizadasDetalle
+                    where customListDetail.ListaPersonalizadaId == id
+                    select customListDetail).ToListAsync();
         }
     }
 }

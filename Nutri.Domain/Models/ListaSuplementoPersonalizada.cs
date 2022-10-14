@@ -2,11 +2,8 @@
 
 namespace Nutri.Domain.Models
 {
-    public class ListaSuplementoPersonalizada:BaseDomainModel
+    public class ListasSuplementosPersonalizadasDetalle:BaseDomainModel
     {
         public string Nombre { get; set; } = string.Empty;
-        public int Renglon { get; set; }
-        public string DescripcionSuplemento { get; set; }=string.Empty;
-
     }
 }

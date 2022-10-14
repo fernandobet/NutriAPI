@@ -26,7 +26,7 @@ namespace Nutri.Infrastructure.Repositories
         public async Task<GetPatientConsultDTO> GetPatientConsult(int id)
         {
             var cabeceroConsulta = await (from consulta in _context.ConsultasPacientes
-                                          join paciente in _context.Pacientes! on consulta.Id equals paciente.Id
+                                          join paciente in _context.Pacientes! on consulta.PacienteId equals paciente.Id
                                           where consulta.Id == id
                                           select new
                                           {
@@ -35,15 +35,22 @@ namespace Nutri.Infrastructure.Repositories
                                               EmailPaciente = paciente.Email
                                           }).FirstOrDefaultAsync();
             var detalleConsulta = await (from alimentosConsulta in _context.ConsultasPacientesAlimentos
-                                         where alimentosConsulta.Id == id
+                                         where alimentosConsulta.ConsultaPacienteId == id
                                          select alimentosConsulta).ToListAsync();
             var comidasAgrupadas = (from alimentosConsulta in _context.ConsultasPacientesAlimentos
-                                    where alimentosConsulta.Id == id
+                                    where alimentosConsulta.ConsultaPacienteId == id
                                     select alimentosConsulta).ToList().GroupBy(x => x.NumeroComida).Select(x => new
                                     {
                                         NumeroComida = x.Key,
                                         HoraComida = x.FirstOrDefault()?.Hora
                                     }).OrderBy(x => x.HoraComida).ToList();
+            //Suplementos
+            var suplementosConsult = await (from suplementosConsulta in _context.ConsultasPacientesSuplementos
+                                            where suplementosConsulta.ConsultaPacienteId == id
+                                            select 
+                                            new IGenSuplementosConMedicionDTO { TextoAdicional = suplementosConsulta.Suplemento })
+                                            .ToListAsync();
+
             var listaConsulta = new List<GetPatientConsultInfoFoodVm>();
             foreach (var comida in comidasAgrupadas)
             {
@@ -53,7 +60,7 @@ namespace Nutri.Infrastructure.Repositories
                 {
                     Hora = comida!.HoraComida,
                     NombrePaciente = cabeceroConsulta!.NombrePaciente,
-                    Numero = comida.NumeroComida,
+                    Numero = comida!.NumeroComida,
                     FechaCreacion = cabeceroConsulta.FechaConsulta.ToShortDateString(),
                     EmailPaciente = cabeceroConsulta.EmailPaciente
                 };
@@ -67,7 +74,18 @@ namespace Nutri.Infrastructure.Repositories
                 nuevoRenglon.AlimentosSeleccionados = alimentosSeleccionados;
                 listaConsulta.Add(nuevoRenglon);
             }
-            return new GetPatientConsultDTO { Alimentos = listaConsulta };
+            //Notes
+            var notas = await _context.ConsultasPacientesNotas.FirstOrDefaultAsync(x => x.ConsultaPacienteId == id);
+
+            GetPatientConsultDTO dtoResponse = new()
+            {
+                IdDietaPaciente = id,
+                Alimentos = listaConsulta,
+                Notas = notas?.Nota ?? String.Empty,
+                Suplementos = suplementosConsult
+
+            };
+            return dtoResponse;
 
         }
     }

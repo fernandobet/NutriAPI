@@ -18,8 +18,12 @@ namespace Nutri.Application.Features.Food.Commands.SaveFood
 
         public async Task<Unit> Handle(SaveFoodCommand request, CancellationToken cancellationToken)
         {
+            
             var entity = _mapper.Map<Alimento>(request);
-             _unitOfWork.Repository<Alimento>().AddEntity(entity);
+
+            entity!.FechaCreacion = DateTime.Now;
+            _unitOfWork.FoodRepository.AddEntity(entity);
+
             await _unitOfWork.Complete();
             return Unit.Value;
         }

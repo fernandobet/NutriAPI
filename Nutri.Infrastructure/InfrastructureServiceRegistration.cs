@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Nutri.Application.Contracts.Persistence;
+﻿using Nutri.Application.Contracts.Persistence;
 using Nutri.Infrastructure.Persistence;
 using Nutri.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Nutri.Infrastructure
 {

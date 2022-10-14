@@ -23,6 +23,7 @@ namespace Nutri.Application.Features.Patients.Commands.SavePatient
         public async Task<Unit> Handle(SavePatientCommand request, CancellationToken cancellationToken)
         {
             var paciente = _mapper.Map<Paciente>(request);
+            paciente.FechaCreacion = DateTime.Now;
              _unitOfWork.Repository<Paciente>().AddEntity(paciente);
             await _unitOfWork.Complete();
             _logger.LogInformation("Paciente guardado correctamente");

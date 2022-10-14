@@ -69,17 +69,17 @@ namespace NutriAPI.Controllers
         }
 
         [HttpGet]
-        [Route("PatientHistory")]
+        [Route("PatientHistory/{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        public async Task<GetHistoryPatientVm> PatientHistory([FromQuery] int idPaciente)
+        public async Task<GetHistoryPatientVm> PatientHistory(int id)
         {
-            var patientHistory = await _mediator.Send(new GetHistoryPatientQuery { IdPaciente = idPaciente });
+            var patientHistory = await _mediator.Send(new GetHistoryPatientQuery { IdPaciente = id });
             return patientHistory;
         }
 
         [HttpGet]
-        [Route("InfConsulta")]
+        [Route("InfConsulta/{idConsulta}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<GetPatientConsultDTO> InfoConsulta(int idConsulta)

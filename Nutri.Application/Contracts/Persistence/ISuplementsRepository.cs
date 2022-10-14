@@ -10,5 +10,7 @@ namespace Nutri.Application.Contracts.Persistence
         List<GetSuplementsCustomListVm> GetSuplementsCustomList();
         List<GetSuplementsMeditionVm> GetSuplementsMedition();
         Task SaveCustomList(AddCustomListDTO dto);
+        Task<List<ListaSuplementoPersonalizadaDetalle>> GetSuplementCustomListDetailById(int id);
+        Task EditCustomList(AddCustomListDTO dto);
     }
 }
