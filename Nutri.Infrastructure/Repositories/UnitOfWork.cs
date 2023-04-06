@@ -14,11 +14,13 @@ namespace Nutri.Infrastructure.Repositories
         private IPatientsRepository _patientRepository;
         private ISuplementsRepository _suplementsRepository;
         private IFoodRepository _foodRepository;
+        private IMedicionRepository _medicionRepository;
 
         public IFoodRepository FoodRepository => _foodRepository ?? new FoodRepository(_context);
         public IPatientsRepository PatientRepository => _patientRepository ?? new PatientsRepository(_context);
         public IUsersRepository UserRepository => _usersRepository ?? new UsersRepository(_context);
         public ISuplementsRepository SuplementsRepository => _suplementsRepository ?? new SuplementsRepository(_context);
+        public IMedicionRepository MedicionRepository => _medicionRepository ?? new MedicionRepository(_context);
 
         public UnitOfWork(NutriAppContext context)
         {

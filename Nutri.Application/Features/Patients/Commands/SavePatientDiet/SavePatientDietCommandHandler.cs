@@ -16,11 +16,11 @@ namespace Nutri.Application.Features.Patients.Commands.SavePatientDiet
 
         public async Task<Unit> Handle(SavePatientDietCommand request, CancellationToken cancellationToken)
         {
-            if(request.ReenviarDieta)
+            if (request.ReenviarDieta)
             {
                 this.enviarDietaEmail(request);
                 return Unit.Value;
-            }   
+            }
             var nuevoCabecero = new ConsultaPaciente();
             nuevoCabecero.PacienteId = request.IdPaciente;
             nuevoCabecero.FechaCreacion = DateTime.Now;
@@ -60,12 +60,13 @@ namespace Nutri.Application.Features.Patients.Commands.SavePatientDiet
                     };
                     _unitOfWork.Repository<ConsultaPacienteSuplementos>().AddEntity(entity);
                 }
-            if(!string.IsNullOrEmpty(request?.Notas))
+            if (!string.IsNullOrEmpty(request?.Notas))
             {
-                ConsultaPacienteNotas consultaPacienteNotas = new() { 
+                ConsultaPacienteNotas consultaPacienteNotas = new()
+                {
                     ConsultaPaciente = nuevoCabecero,
                     ConsultaPacienteId = nuevoCabecero.Id,
-                    FechaCreacion= DateTime.Now,
+                    FechaCreacion = DateTime.Now,
                     Nota = request.Notas
                 };
                 _unitOfWork.Repository<ConsultaPacienteNotas>().AddEntity(consultaPacienteNotas);
@@ -73,11 +74,19 @@ namespace Nutri.Application.Features.Patients.Commands.SavePatientDiet
             await _unitOfWork.Complete();
             if (!string.IsNullOrEmpty(request?.EmailBody?.Attachment))
                 this.enviarDietaEmail(request);
-
             return await Task.FromResult(Unit.Value);
         }
 
 
-        private void enviarDietaEmail(SavePatientDietCommand request) => SendEmail.Send(request.EmailBody, request.NombrePaciente, request.EmailPaciente);
+        private void enviarDietaEmail(SavePatientDietCommand request)
+        {
+            try
+            {
+                SendEmail.Send(request.EmailBody, request.NombrePaciente, request.EmailPaciente);
+            }
+            catch (Exception ex)
+            {
+            }
+        }
     }
 }

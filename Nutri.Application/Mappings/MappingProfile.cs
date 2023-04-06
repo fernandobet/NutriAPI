@@ -2,6 +2,7 @@
 using AutoMapper;
 using Nutri.Application.Features.Food.Commands.ModifyFood;
 using Nutri.Application.Features.Food.Commands.SaveFood;
+using Nutri.Application.Features.Mediciones.Commands.SaveMedicion;
 using Nutri.Application.Features.Patients.Commands.DeletePatient;
 using Nutri.Application.Features.Patients.Commands.ModifyPatient;
 using Nutri.Application.Features.Patients.Commands.SavePatient;
@@ -31,6 +32,7 @@ namespace Nutri.Application.Mappings
             CreateMap<ModifyFoodCommand, Alimento>();
             CreateMap<AddSuplementCommand, Suplemento>();
             CreateMap<EditSuplementCommand, Suplemento>();
+            CreateMap<SaveMedicionCommand, MedicionAlimento>();
 
 
         }

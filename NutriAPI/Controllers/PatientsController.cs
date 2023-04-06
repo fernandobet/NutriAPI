@@ -75,7 +75,9 @@ namespace NutriAPI.Controllers
         public async Task<GetHistoryPatientVm> PatientHistory(int id)
         {
             var patientHistory = await _mediator.Send(new GetHistoryPatientQuery { IdPaciente = id });
-            return patientHistory;
+            if(patientHistory?.ListaConsultas.Any()??false)
+                patientHistory.ListaConsultas = patientHistory.ListaConsultas.OrderByDescending(x => x.FechaConsulta).ToList();
+           return patientHistory;
         }
 
         [HttpGet]

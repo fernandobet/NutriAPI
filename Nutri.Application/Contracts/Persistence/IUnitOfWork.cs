@@ -8,6 +8,7 @@ namespace Nutri.Application.Contracts.Persistence
         public IPatientsRepository PatientRepository { get; }
         public ISuplementsRepository SuplementsRepository { get; }
         public IFoodRepository FoodRepository { get; }
+        public IMedicionRepository MedicionRepository { get; }
         IAsyncRepository<TEntity> Repository<TEntity>() where TEntity : BaseDomainModel;
         Task<int> Complete();
     }

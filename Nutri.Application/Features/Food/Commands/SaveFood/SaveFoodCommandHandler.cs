@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Nutri.Application.Contracts.Persistence;
+using Nutri.Application.Utils;
 using Nutri.Domain.Models;
 
 namespace Nutri.Application.Features.Food.Commands.SaveFood
@@ -20,7 +21,12 @@ namespace Nutri.Application.Features.Food.Commands.SaveFood
         {
             
             var entity = _mapper.Map<Alimento>(request);
-
+            //Images
+            //string fullPath = string.Empty;
+            //string fileName = string.Empty;
+            //if (!AdminFiles.ValidateImageExists(request.Imagen, out fullPath, out fileName))
+            //    AdminFiles.AdminImage(request.Imagen, fullPath, fileName);
+            //entity.Imagen = fullPath;
             entity!.FechaCreacion = DateTime.Now;
             _unitOfWork.FoodRepository.AddEntity(entity);
 
