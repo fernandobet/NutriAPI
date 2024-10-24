@@ -33,10 +33,11 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 //Agregamos el middleware
 //app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
+app.UseCors("CorsPolicy");
+
 //Colocar este para la autenticacion con identity
 app.UseAuthentication();
 //Agregamos los cors
-app.UseCors("CorsPolicy");
 app.UseAuthorization();
 
 app.MapControllers();

@@ -29,10 +29,10 @@ namespace Nutri.Application.Utils
         }
         private static void sendAction(string path, string nombrePaciente, string emailDestino)
         {
-            string emailOrigin = "yeyoyectaclan@outlook.com";
+            string emailOrigin = "yectayeyo@outlook.com";
             string contraseña = "Tumama.123$";
 
-            MailMessage onMailMessage = new MailMessage(emailOrigin, emailDestino, "PLAN ALIMENTICIO", "Querido(a) " + nombrePaciente + " a continuacion le anexamos su plan alimenticio <br/> Saludos.<br/> <strong>YEYO ADAME</strong> <br/><strong>Este es un sistema automatizado, favor de no responder este mensaje</strong>");
+            MailMessage onMailMessage = new MailMessage(emailOrigin, emailDestino, "PLAN ALIMENTICIO", "Estimado(a) " + nombrePaciente + " a continuacion le anexamos su plan alimenticio <br/> Saludos.<br/> <strong>YEYO ADAME</strong> <br/><strong>Este es un sistema automatizado, favor de no responder este mensaje</strong>");
             onMailMessage.Attachments.Add(new Attachment(path));
             onMailMessage.IsBodyHtml = true;
             SmtpClient onSmptClient = new SmtpClient("smtp.outlook.com");
